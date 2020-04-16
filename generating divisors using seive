@@ -17,15 +17,11 @@ void fill_sieve(){
 void gen_divisors(vector<long long> &p, vector<int> &e, int i, long long acum, vector<long long> &ans){
   if(i == p.size()){
     ans.push_back(acum);
-    cout<<"2"<<endl;
-    cout<<acum<<endl;
     return;
   }
   for(int j = 0; j <= e[i]; ++j){
     gen_divisors(p,e,i+1,acum,ans);
     acum *= p[i];
-    cout<<j<<endl;
-    cout<<acum<<endl;
   }
 }
 
