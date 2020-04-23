@@ -7,14 +7,13 @@ vector<ll>prime;
 void seive()
 {
     memset(flag,1,sizeof(flag));
-    ll val=sqrt(m);
-    for(ll i=2;i<=val;i++)
+    for(ll i=2;i<=m;i++)
     {
         if(flag[i])
         {
-            for(ll j=i;j*i<=m;j++)
+            for(ll j=i*i;j<=m;j+=i)
             {
-                flag[i*j]=0;
+                flag[j]=0;
             }
         }
     }
@@ -24,16 +23,6 @@ void seive()
             prime.push_back(i);
     }
 }
-ll findsol(ll n)
-{
-    ll res=0;
-    for(ll i=2;i<=n/2;i++)
-    {
-        if(flag[i] && flag[n-i])
-            res++;
-    }
-    return res;
-}
 int main()
 {
    ll t;
@@ -41,9 +30,14 @@ int main()
    seive();
    for(ll i=1;i<=t;i++)
    {
-       ll n;
+       ll n,cnt=0;
        scanf("%lld",&n);
-       printf("Case %lld: %lld\n",i,findsol(n));
+       for(ll j=0;v[j]<=n/2;j++)
+       {
+           if(flag[n-v[j]])
+               cnt++;
+       }
+       printf("Case %lld: %lld\n",i,cnt);
    }
    return 0;
 }
