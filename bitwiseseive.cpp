@@ -1,46 +1,27 @@
-#include <stdio.h>
-#define maxL (10000000>>5)+1
-#define GET(x) (mark[(x)>>5]>>((x)&31)&1)
-#define SET(x) (mark[(x)>>5] |= 1<<((x)&31))
-int mark[maxL];
-void sieve() {
-    register int i, j, k;
-    SET(1);
-    int n = 10000000;
-    for(i = 2; i <= n; i++) {
-        if(!GET(i)) {
-            for(k = n/i, j = i*k; k >= i; k--, j -= i)
-                SET(j);
+#define MAX 100000000//max num to prime
+#define LMT 10000 //sqrt(MAX)
+ 
+int flag[MAX/64];
+int prime[100000000],total;
+ 
+#define chkC(n) (flag[n>>6]&(1<<((n>>1)&31)))
+#define setC(n) (flag[n>>6]|=(1<<((n>>1)&31)))
+ 
+void sieve()
+{
+    unsigned i,j,k;
+ 
+    flag[0]|=0;
+    for(i=3;i<LMT;i+=2)
+        if(!chkC(i))
+            for(j=i*i,k=i<<1;j<MAX;j+=k)
+                setC(j);
+ 
+    prime[(j=0)++] = 2;//prime starts from 0 position
+    for(i=3;i<MAX;i+=2)
+        if(!chkC(i))
+        {
+            prime[j++] = i;
+            //printf("%d\n",primes[j-1]);
         }
-    }
-}
-void Goldbach(int n) {
-    if(n == 4) {
-        printf("2 2");
-        return;
-    }
-    static int i;
-    for(i = 3; ; i += 2) {
-        if(!GET(i) && !GET(n-i)) {
-            printf("%d %d", i, n-i);
-            return;
-        }
-    }
-}
-int main() {
-    sieve();
-    int n;
-    while(scanf("%d", &n) == 1) {
-        if(n < 8) {
-            puts("Impossible.");
-            continue;
-        }
-        if(n&1)
-            printf("2 3 "), n -= 5;
-        else
-            printf("2 2 "), n -= 4;
-        Goldbach(n);
-        puts("");
-    }
-    return 0;
-}
+    total = j-1;
